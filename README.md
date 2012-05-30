@@ -1,4 +1,4 @@
-meaningful-chance
+Meaningful Chance
 =================
 
-A web app to convert chances in to something more meaningful
+[Live Example](http://scommab.github.com/meaningful-chance/ "Meaningful Chance")
