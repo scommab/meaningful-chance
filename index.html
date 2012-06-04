@@ -21,9 +21,6 @@
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
   <style>
-  .debug {
-    display: none;
-  }
   .chance {
     padding: 3px;
     margin: 10px;
@@ -231,7 +228,6 @@
       $span.prepend("You are far more likely to ");
     }
 
-    $span.append("<span class='debug'>" + total + " "+ percent +   "</span>");
     $span.append($("<a id='details_link' href='#'>details</a>").click(function() {
       $(".details").show();
       $("#details_link").hide();
