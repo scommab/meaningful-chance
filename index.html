@@ -50,9 +50,34 @@
     margin-bottom: 5px;
     margin-right: 5px;
   }
+  #details_link {
+    float: right;
+    position: absolute;
+    font-size: 80%;
+    color: whiteSmoke;
+  }
+  #details_link:hover {
+    color: #08C;
+  }
+  table.details {
+    margin: auto;
+    margin-top: 20px;
+    width: 70%;
+    display: none;
+  }
+  table.details tr:nth-child(1) {
+    border-top: none;
+  }
+  table.details td:nth-child(3) {
+    text-align: right;
+  }
+  table.details tr {
+    border-top: dashed thin black;
+  }
   .well {
     /*background-image: url("img/background/scribble_light.png");*/
   }
+  
   #result {
     text-align: center;
   }
@@ -88,6 +113,7 @@
       <!-- <i class="icon-circle-arrow-right"> </i> -->
        Make It Meaningful </button>
       <br/>
+      <!-- http://www.nsc.org/NSC%20Picture%20Library/News/web_graphics/Injury_Facts_37.pdf  -->
       <div class="examples"> <!-- from http://www.funny2.com/odds.htm -->
         Examples:
         <a href="#" class="chance" chance="576000">Chance of getting hit by lighting</a>
@@ -108,21 +134,44 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script src="chances.js"></script>
 <script>
+  function keyToString(key) {
+    if (key == "pick_card") {
+      return "drawing the ace of spades";
+    } else if(key == "roulette_wheel") {
+      return "spin double zero on a roulette wheel";
+    } else if(key == "royal_flush") {
+      return "be delt a royal flush";
+    } else if(key == "coin_flip") {
+      return "win a coin flip";
+    } else if(key == "roll_dice") {
+      return "roll the same number on two dice";
+    }
+  }
+  function toDetails(stat) {
+    var num = stat[2];
+    var num_str = "<sup>" + num + "</sup>";
+    if(num == 1) {
+      num_str = '';
+    }
+    var key = stat[1];
+    var base = base_stats[key];
+    var text = toText(stat);
+    //return text + " (1 in " + base + ") <sup>" + num + "</sup>";
+    return "<tr><td>" + text + "</td>" +
+           "<td> 1 in " + base + num_str + "</td>" +
+           "<td> 1 in " + Math.pow(base, num) + "</td></tr>"
+
+  }
+  function toDetailsTotal(total) {
+    return "<tr><td>Total</td>" +
+           "<td> &nbsp; </td>" +
+           "<td> 1 in " + total + "</td></tr>"
+
+  }
   function toText(stat) {
     var num = stat[2];
     var key = stat[1];
-    var text = "";
-    if (key == "pick_card") {
-      text = "drawing the ace of spades";
-    } else if(key == "roulette_wheel") {
-      text = "spin double zero on a roulette wheel";
-    } else if(key == "royal_flush") {
-      text = "be delt a royal flush";
-    } else if(key == "coin_flip") {
-      text = "win a coin flip";
-    } else if(key == "roll_dice") {
-      text = "roll the same number on two dice";
-    }
+    var text = keyToString(key);
     if (num == 2) {
       text += " twice";
     } else if(num > 2) {
@@ -157,18 +206,23 @@
 
     var $r = $("#result");
     var $span = $("<span class='answer'></span>");
+    var $details = $("<table class='details'></table>");
 
     var chances = findChances(num)
     var total = chances["total"];
     var results = chances["results"];
     var percent = chances["percent"];
 
-    for(var r=0;r<results.length;r++) {
-      if (r != 0) {
+    var i;
+
+    for(i=0;i<results.length;i++) {
+      if (i != 0) {
         $span.append(" and ")
       }
-      $span.append(toText(results[r]));
+      $span.append(toText(results[i]));
+      $details.append(toDetails(results[i]));
     }
+    $details.append(toDetailsTotal(total));
     if (percent < 10) {
       $span.prepend("You are more likely to ");
     } else if (percent < 30) {
@@ -177,8 +231,13 @@
       $span.prepend("You are far more likely to ");
     }
 
-    $span.attr("total", total); // for debug
     $span.append("<span class='debug'>" + total + " "+ percent +   "</span>");
+    $span.append($("<a id='details_link' href='#'>details</a>").click(function() {
+      $(".details").show();
+      $("#details_link").hide();
+      return false;
+    }));
+    $span.append($details);
     $span.hide();
     $r.html($span);
     $span.fadeIn();
