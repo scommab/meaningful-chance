@@ -10,13 +10,19 @@ var stats = [[6278211847988224, "roulette_wheel", 10], [3656158440062976, "roll_
 
 
 function findChances(num) {
-    var simple = simpleChances(num);
+    var simple = combine(simpleChances(num));
     var simpleTotal = totalChances(simple);
     var simplePercent = 100 * (num - simpleTotal) / num
 
     var complex = complexChances(num);
-    var complexTotal = totalChances(complex);
-    var complexPercent = 100 * (num - complexTotal) / num
+    var complexTotal = 0;
+    var complexPercent = 100;
+
+    if (complex != null) {
+      complex = combine(complex);
+      complexTotal = totalChances(complex);
+      complexPercent = 100 * (num - complexTotal) / num
+    }
 
     if (simplePercent < complexPercent) {
       return {
@@ -71,44 +77,37 @@ function simpleChances(num) {
       break;
     }
   }
-  return combine(results);
+  return results;
 }
 
-function complexChances(num) {
-  var results = []
-  while(1) {
-    var found = false;
-    for (s=0;s<stats.length;s++) {
-      if (num % stats[s][0] == 0) {
-        num = Math.floor(num / stats[s][0]);
-        found = true;
-        results.push(stats[s].slice());
-      }
+function complexChances(total, cur_val, num, results) {
+  if(results == undefined) {
+    results = []
+  }
+  if(num == undefined) {
+    num = total;
+  }
+  if(cur_val == undefined) {
+    cur_val = 1;
+  }
+  if(cur_val / total > .8) {
+    return results;
+  }
+  for (var s=0;s<stats.length;s++) {
+    if (stats[s][1] == "coin_flip" && stats[s][0] != 2) {
+      continue;
     }
-    if(!found || num == 1) {
-      break;
+    if (num >= stats[s][0]) {
+      new_num = Math.floor(num / stats[s][0]);
+      results.push(stats[s].slice());
+      r = complexChances(total, cur_val * stats[s][0], new_num, results)
+      if(r != null) {
+        return r;
+      }
+      results.pop()
     }
   }
-  if (num != 1) {
-    var simple = simpleChances(num);
-    // TODO merge them
-    //results = results.concat(simple);
-    var r;
-    for(s=0;s<simple.length;s++) {
-      found = false;
-      for(r=0;r<results.length;r++) {
-        if (results[r][1] == simple[s][1]) {
-          results[r][2] += simple[s][2];
-          results[r][0] *= simple[s][0];
-          found = true;
-        }
-      }
-      if (!found) {
-        results.push(simple[s]);
-      }
-    }
-  }
-  return combine(results);
+  return null;
 }
 
 function combine(list) {
