@@ -238,7 +238,9 @@
       $details.append(toDetails(results[i]));
     }
     $details.append(toDetailsTotal(total));
-    if (percent < 10) {
+    if (percent == 0) {
+      $span.prepend("You just as likely to ");
+    } else if (percent < 10) {
       $span.prepend("You are more likely to ");
     } else if (percent < 30) {
       $span.prepend("You are considerably more likely to ");
