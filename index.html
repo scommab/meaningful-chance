@@ -210,16 +210,24 @@
       return;
     }
     var num = parseInt(text);
+    var $r = $("#result");
     if (!num) {
       failText("Invalid number: I only accept whole numbers");
       return;
     }
-    if (num <= 1) {
+    if (num == 1) {
+      var $span = $("<span class='answer'></span>");
+      $span.append("You are just as likely to <span class='stat'>have just searched 1</span>");
+      $span.hide();
+      $r.html($span);
+      $span.fadeIn();
+      return;
+    }
+    if (num < 1) {
       failText("Invalid number: I only accept numbers greater then 1");
       return;
     }
 
-    var $r = $("#result");
     var $span = $("<span class='answer'></span>");
     var $details = $("<table class='details'></table>");
 
@@ -239,7 +247,7 @@
     }
     $details.append(toDetailsTotal(total));
     if (percent == 0) {
-      $span.prepend("You just as likely to ");
+      $span.prepend("You are just as likely to ");
     } else if (percent < 10) {
       $span.prepend("You are more likely to ");
     } else if (percent < 30) {
