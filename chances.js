@@ -1,12 +1,5 @@
 // TODO: make this a separate json file
 var Chances = {
-  base_stats: {
-      "coin_flip": 2,
-      "roll_dice": 6,
-      "roulette_wheel": 38,
-      "pick_card": 52,
-      "royal_flush": 649740
-  },
   stats: [
     [649740, "royal_flush", 1],
     [52, "pick_card", 1],
@@ -14,6 +7,15 @@ var Chances = {
     [6, "roll_dice", 1],
     [2, "coin_flip", 1]
   ],
+
+  baseStat: function(key) {
+    for(var i=0;i<this.stats.length;i++) {
+      if (key == this.stats[i][1]) {
+        return this.stats[i][0];
+      }
+    }
+    return -1;
+  },
 
 
   findChances: function(num) {

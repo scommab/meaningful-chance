@@ -165,7 +165,7 @@
       num_str = '';
     }
     var key = stat[1];
-    var base = Chances.base_stats[key];
+    var base = Chances.baseStat(key);
     var text = toText(stat);
     //return text + " (1 in " + base + ") <sup>" + num + "</sup>";
     return "<tr><td>" + text + "</td>" +
