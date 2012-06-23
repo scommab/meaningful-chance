@@ -31,6 +31,7 @@
     margin: 5px;
     padding: 5px;
     line-height: 30px;
+    white-space: nowrap;
   }
   .hero-unit {
     margin-top: 10px;
@@ -188,10 +189,10 @@
     } else if(num > 2) {
       text += " " + num + " times in a row";
     }
-    var result = "<span class='stat " + key + "'><nobr>";
+    var result = "<span class='stat " + key + "'>";
     result += "<img src='img/things/"+key+"_small.png'>";
     result += text;
-    result += "</nobr></span>";
+    result += "</span>";
     return result;
   }
 
