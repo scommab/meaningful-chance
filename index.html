@@ -188,10 +188,10 @@
     } else if(num > 2) {
       text += " " + num + " times in a row";
     }
-    var result = "<span class='stat " + key + "'>";
+    var result = "<span class='stat " + key + "'><nobr>";
     result += "<img src='img/things/"+key+"_small.png'>";
     result += text;
-    result += "</span>";
+    result += "</nobr></span>";
     return result;
   }
 
