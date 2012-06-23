@@ -165,7 +165,7 @@
       num_str = '';
     }
     var key = stat[1];
-    var base = base_stats[key];
+    var base = Chances.base_stats[key];
     var text = toText(stat);
     //return text + " (1 in " + base + ") <sup>" + num + "</sup>";
     return "<tr><td>" + text + "</td>" +
@@ -231,7 +231,7 @@
     var $span = $("<span class='answer'></span>");
     var $details = $("<table class='details'></table>");
 
-    var chances = findChances(num)
+    var chances = Chances.findChances(num)
     var total = chances["total"];
     var results = chances["results"];
     var percent = chances["percent"];
